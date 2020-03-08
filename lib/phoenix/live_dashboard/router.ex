@@ -40,6 +40,10 @@ defmodule Phoenix.LiveDashboard.Router do
         live "/:node/metrics/:group", Phoenix.LiveDashboard.MetricsLive, :metrics, opts
         live "/:node/request_logger", Phoenix.LiveDashboard.LoggerLive, :request_logger, opts
         live "/:node/request_logger/:stream", Phoenix.LiveDashboard.LoggerLive, :request_logger, opts
+
+        for {route, live_view, action, _title} <- Application.get_env(:phoenix_live_dashboard, :components, []) do
+          live route, live_view, action, opts
+        end
       end
     end
   end

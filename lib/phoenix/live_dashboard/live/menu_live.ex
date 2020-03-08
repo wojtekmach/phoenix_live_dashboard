@@ -21,7 +21,13 @@ defmodule Phoenix.LiveDashboard.MenuLive do
     ~L"""
     <%= maybe_active_live_redirect @socket, "Home", :home, @node %> |
     <%= maybe_enabled_live_redirect @socket, "Metrics", :metrics, @node %> |
-    <%= maybe_enabled_live_redirect @socket, "Request Logger", :request_logger, @node %> --
+    <%= maybe_enabled_live_redirect @socket, "Request Logger", :request_logger, @node %>
+
+    <%= for {_route, _live_view, action, title} <- Application.get_env(:phoenix_live_dashboard, :components, []) do %>
+      <%= maybe_active_live_redirect @socket, title, action, @node %>
+    <% end %>
+
+    --
 
     <form phx-change="select_node" style="display:inline">
       Node: <%= select :node_selector, :node, @nodes, value: @node %> |
